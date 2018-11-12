@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> CART345</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <style>
+  body{
+    margin:0;
+    padding:0;
+  }
+  canvas{
+    background:black;
+    margin:0;
+    padding:0;
+  }
+
+  </style>
+<h1> ESPACE BOX </h1>
+  <body>
+
+
+    <div id="text">
+
+    </div>
+    <h2>Enter at your own risk </h2>
+    <a href="keyboard.html" class="button"> Click me to enter! </a>
+
+
+<script type="text/javascript">
+var i=0, text;
+text = "Type with the keyboard your Fears, Struggles or Concerns on the next screen!"
+
+function typing(){
+  if(i<text.length){
+    document.getElementById("text").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typing, 100);
+  }
+}
+
+typing();
+let canvas = document.getElementById('testCanvas');
+let canvasContext = canvas.getContext('2d');
+let W = window.innerWidth;
+let H = window.innerHeight;
+canvas.width = W;
+canvas.height = H;
+
+
+window.onresize = function(event) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+
+
+</script>
+
+
+
+  </body>
+</html>
