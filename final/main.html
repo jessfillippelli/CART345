@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Jessica Filippelli'S DB4 </title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- normal font -->
+  <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
+  <!-- kids font -->
+  <link href="https://fonts.googleapis.com/css?family=Butterfly+Kids" rel="stylesheet">
+<!-- children font -->
+  <link href="https://fonts.googleapis.com/css?family=Freckle+Face" rel="stylesheet">
+<!-- teens font -->
+  <link href="https://fonts.googleapis.com/css?family=Boogaloo" rel="stylesheet">
+
+
+
+  <script>
+  window.onload = function(){ //START ONLOAD
+    let letterList = []; //mouse click on canavas
+    let snakeWords = [];
+document.getElementById("audioC").load();
+document.getElementById("audioD").load();
+document.getElementById("audioE").load();
+document.getElementById("audioF").load();
+document.getElementById("audioG").load();
+
+
+// get the canvas
+let canvas = document.getElementById("testCanvas");
+
+//get the context
+let context = canvas.getContext("2d");
+let playing = false;
+
+
+
+canvas.addEventListener("mousemove",(event)=>{
+console.log("mouse is in canvas");
+
+
+playing =false;
+for(let i=0; i< snakeWords.length;i++){ //mouse click on canavs
+  snakeWords[i].hitTest(event);
+//  console.log(playing);
+}
+ if(playing ===false){
+
+document.getElementById("audioC").play();
+document.getElementById("audioD").pause();
+document.getElementById("audioE").pause();
+document.getElementById("audioF").pause();
+document.getElementById("audioG").pause();
+
+ }
+ else{
+   document.getElementById("audioC").pause();
+
+ }
+});
+
+// canvas.height/2
+//snakeWords.push(new snakeWord("fais dodo colas mon p'tit frere maman est en haut qui fait du gateau papa est en bas qui fait du chocolate",180,75.0));
+snakeWords.push(new snakeWord("fais dodo colas mon p'tit frere",180,75.0));
+// snakeWords.push(new snakeWordtwo("you put your right foot in you take your right foot out You put your right foot in and you shake it all about you do the hokey pokey and you turn yourself around That's what it's all about",400,75.0));
+snakeWords.push(new snakeWordtwo("hokey pokey",400,60.0));
+//snakeWords.push(new snakeWordthree("im more than just an option Hey hey hey refuse to be forgotten hey hey hey I took a chance with my heart hey hey hey and i feel it taking over i better find your lovin",600,75.0));
+snakeWords.push(new snakeWordthree("find your love",600,70.0));
+//snakeWords.push(new snakeWordfour("im on my way driving at ninety down those country lanes singing to tiny dancer and i miss the way you make me feel and its real We watched the sunset over the castle on the hill",800,75.0));
+snakeWords.push(new snakeWordfour("the castle on the hill",800,75.0));
+
+
+requestAnimationFrame(runAni);
+
+function runAni(){
+  //console.log("run .. ");
+  context.clearRect(0,0,canvas.width,canvas.height);
+  //calcWave();
+ ///renderWave();
+ for(let i=0; i< snakeWords.length; i++){
+ snakeWords[i].calcWave();
+ snakeWords[i].render();
+
+}
+requestAnimationFrame(runAni);
+}
+
+
+
+function snakeWord(theWord, startY,amplitude){
+  this.words = theWord.split(" ");
+
+  this.xspacing = 70; //space btw the words
+  this.theta = 0.0;      // Start angle at 0
+  this.amplitude = amplitude; // Height of wave
+  this.period = 500.0;   // How many pixels before the wave repeats
+  this.w = canvas.width+16;
+  this.dx = (2*Math.PI / this.period) * this.xspacing;
+  this.yvalues = new Array(Math.floor(this.w/this.xspacing));
+  this.startY=startY;
+  this.fontString = "20px 'Oxygen', sans-serif";
+  this.fillColor = "#FFFF00";
+  this.xVals = [];
+  this.yVals = [];
+  this.wordsC= [];
+  this.wordsFonts = [];
+  for (let x = 0; x < this.yvalues.length; x++) {
+
+    this.wordsFonts[x] ="15px 'Oxygen', sans-serif";
+  }
+
+
+  this.render = function(){
+    for (let x = 0; x < this.yvalues.length; x++) {
+
+    context.font = this.wordsFonts[x];
+    context.fillStyle = this.fillColor;
+
+    this.xVals[x] = x*this.xspacing;
+    this.yVals[x] = this.startY+this.yvalues[x];
+    this.wordsC [x] = this.words[x%this.words.length];
+
+    context.fillText(this.words[x%this.words.length],this.xVals[x], this.yVals[x]);
+
+
+    }
+  }
+
+    this.calcWave = function(){
+
+
+      //  this.theta += 0.02; //MAKE IT MOVE
+
+        // For every x value, calculate a y value with sine function
+        let x = this.theta;
+        for (let i = 0; i < this.yvalues.length; i++) {
+          this.yvalues[i] = Math.sin(x)*this.amplitude;
+          x+=this.dx;
+        }
+      }
+
+      this.hitTest = function(event){
+      //  let playing =false;
+        let c = canvas.getBoundingClientRect();
+        let mouseY = event.clientY -c.top;
+        let mouseX = event.clientX -c.left;
+        for (let i = 0; i < this.xVals.length; i++) {
+          if(mouseX>this.xVals[i]-65 && mouseX<this.xVals[i]+65&&
+            mouseY<this.yVals[i]+40 && mouseY>this.yVals[i]-40)
+          {
+            console.log("hit:: "+this.wordsC[i]);
+            this.wordsFonts[i] ="50px 'Butterfly Kids', cursive"; //when you hover over
+            document.getElementById("audioD").play();
+            document.getElementById("audioE").pause();
+            document.getElementById("audioF").pause();
+            document.getElementById("audioG").pause();
+            playing=true;
+          }
+        else {
+         this.wordsFonts[i] ="20px 'Oxygen', sans-serif"; // when the word is  NOT being hit
+
+          }
+        }//for
+
+
+      }
+    }//snakeone
+
+    function snakeWordtwo(theWord, startY,amplitude){
+      this.words = theWord.split(" ");
+
+      this.xspacing = 125; //space btw the words
+      this.theta = 0.0;      // Start angle at 0
+      this.amplitude = amplitude; // Height of wave
+      this.period = 500.0;   // How many pixels before the wave repeats
+      this.w = canvas.width+16;
+      this.dx = (2*Math.PI / this.period) * this.xspacing;
+      this.yvalues = new Array(Math.floor(this.w/this.xspacing));
+      this.startY=startY;
+      this.fontString = "100px 'Freckle Face', cursive"; // when the word is being hit
+      this.fillColor = "#FFA500";
+      this.xVals = [];
+      this.yVals = [];
+      this.wordsC= [];
+      this.wordsFonts = [];
+      for (let x = 0; x < this.yvalues.length; x++) {
+        this.wordsFonts[x] ="20px 'Oxygen', sans-serif"; // when the word is NOT being hit
+      }
+
+
+      this.render = function(){
+        for (let x = 0; x < this.yvalues.length; x++) {
+
+        context.font = this.wordsFonts[x];
+        context.fillStyle = this.fillColor;
+
+        this.xVals[x] = x*this.xspacing;
+        this.yVals[x] = this.startY+this.yvalues[x];
+        this.wordsC [x] = this.words[x%this.words.length];
+
+        context.fillText(this.words[x%this.words.length],this.xVals[x], this.yVals[x]);
+
+
+        }
+      }
+
+        this.calcWave = function(){
+
+
+          //  this.theta += 0.05; //MAKE IT MOVE
+
+            // For every x value, calculate a y value with sine function
+            let x = this.theta;
+            for (let i = 0; i < this.yvalues.length; i++) {
+              this.yvalues[i] = Math.sin(x)*this.amplitude;
+              x+=this.dx;
+            }
+          }
+
+          this.hitTest = function(event){
+          //  let playing = false;
+            let c = canvas.getBoundingClientRect();
+            let mouseY = event.clientY -c.top;
+            let mouseX = event.clientX -c.left;
+            for (let i = 0; i < this.xVals.length; i++) {
+              if(mouseX>this.xVals[i]-76 && mouseX<this.xVals[i]+76&&
+                mouseY<this.yVals[i]+55 && mouseY>this.yVals[i]-55)
+              {
+                console.log("hit:: "+this.wordsC[i]);
+                this.wordsFonts[i] ="70px 'Freckle Face', cursive"; //when you hover over
+                document.getElementById("audioE").play();
+                document.getElementById("audioD").pause();
+                document.getElementById("audioF").pause();
+                document.getElementById("audioG").pause();
+                playing =true;
+              }
+            else {
+             this.wordsFonts[i] ="20px 'Oxygen', sans-serif"; // when the word is NOT being hit
+            // document.getElementById("audioE").pause();
+             }
+            }//for
+
+          }
+        }//snake two
+
+        function snakeWordthree(theWord, startY,amplitude){
+          this.words = theWord.split(" ");
+
+          this.xspacing = 150; //space btw the words
+          this.theta = 0.0;      // Start angle at 0
+          this.amplitude = amplitude; // Height of wave
+          this.period = 500.0;   // How many pixels before the wave repeats
+          this.w = canvas.width+16;
+          this.dx = (2*Math.PI / this.period) * this.xspacing;
+          this.yvalues = new Array(Math.floor(this.w/this.xspacing));
+          this.startY=startY;
+          this.fontString = "100px 'Oxygen', sans-serif"; // when the word is being hit
+          this.fillColor = "#0000FF";
+          this.xVals = [];
+          this.yVals = [];
+          this.wordsC= [];
+          this.wordsFonts = [];
+          for (let x = 0; x < this.yvalues.length; x++) {
+            this.wordsFonts[x] ="20px 'Oxygen', sans-serif";// when the word is NOT being hit
+          }
+
+
+          this.render = function(){
+            for (let x = 0; x < this.yvalues.length; x++) {
+
+            context.font = this.wordsFonts[x];
+            context.fillStyle = this.fillColor;
+
+            this.xVals[x] = x*this.xspacing;
+            this.yVals[x] = this.startY+this.yvalues[x];
+            this.wordsC [x] = this.words[x%this.words.length];
+
+            context.fillText(this.words[x%this.words.length],this.xVals[x], this.yVals[x]);
+
+
+            }
+          }
+
+            this.calcWave = function(){
+
+
+              //  this.theta += 0.02; //MAKE IT MOVE
+
+                // For every x value, calculate a y value with sine function
+                let x = this.theta;
+                for (let i = 0; i < this.yvalues.length; i++) {
+                  this.yvalues[i] = Math.sin(x)*this.amplitude;
+                  x+=this.dx;
+                }
+              }
+
+              this.hitTest = function(event){
+                //let playing =false;
+                let c = canvas.getBoundingClientRect();
+                let mouseY = event.clientY -c.top;
+                let mouseX = event.clientX -c.left;
+                for (let i = 0; i < this.xVals.length; i++) {
+                  if(mouseX>this.xVals[i]-90 && mouseX<this.xVals[i]+90&&
+                    mouseY<this.yVals[i]+72 && mouseY>this.yVals[i]-72)
+                  {
+                    console.log("hit:: "+this.wordsC[i]);
+                    this.wordsFonts[i] ="100px 'Boogaloo', cursive"; // when the word is being hit
+                    document.getElementById("audioF").play();
+                    document.getElementById("audioD").pause();
+                    document.getElementById("audioE").pause();
+                    document.getElementById("audioG").pause();
+                    playing =true;
+                  }
+                else {
+                 this.wordsFonts[i] ="20px 'Oxygen', sans-serif"; // when the word is NOT being hit
+            ;
+
+                 }
+                }//for
+
+
+              }
+            }//snake three
+
+            function snakeWordfour(theWord, startY,amplitude){
+              this.words = theWord.split(" ");
+
+              this.xspacing = 165; //space btw the words
+              this.theta = 0.0;      // Start angle at 0
+              this.amplitude = amplitude; // Height of wave
+              this.period = 500.0;   // How many pixels before the wave repeats
+              this.w = canvas.width+16;
+              this.dx = (2*Math.PI / this.period) * this.xspacing;
+              this.yvalues = new Array(Math.floor(this.w/this.xspacing));
+              this.startY=startY;
+              this.fontString = "100px 'Oxygen', sans-serif"; // when the word is being hit
+              this.fillColor = "#551A8B";
+              this.xVals = [];
+              this.yVals = [];
+              this.wordsC= [];
+              this.wordsFonts = [];
+              for (let x = 0; x < this.yvalues.length; x++) {
+                this.wordsFonts[x] ="20px 'Oxygen', sans-serif";// when the word is NOT being hit
+              }
+              //console.log(this.words);
+
+              this.render = function(){
+                for (let x = 0; x < this.yvalues.length; x++) {
+
+                context.font = this.wordsFonts[x];
+                context.fillStyle = this.fillColor;
+
+                this.xVals[x] = x*this.xspacing;
+                this.yVals[x] = this.startY+this.yvalues[x];
+                this.wordsC [x] = this.words[x%this.words.length];
+
+                context.fillText(this.words[x%this.words.length],this.xVals[x], this.yVals[x]);
+
+
+                }
+              }
+
+                this.calcWave = function(){
+
+
+                  //  this.theta += 0.02; //MAKE IT MOVE
+
+                    // For every x value, calculate a y value with sine function
+                    let x = this.theta;
+                    for (let i = 0; i < this.yvalues.length; i++) {
+                      this.yvalues[i] = Math.sin(x)*this.amplitude;
+                      x+=this.dx;
+                    }
+                  }
+
+                  this.hitTest = function(event){
+                    //let playing =false;
+                    let c = canvas.getBoundingClientRect();
+                    let mouseY = event.clientY -c.top;
+                    let mouseX = event.clientX -c.left;
+                    for (let i = 0; i < this.xVals.length; i++) {
+                      if(mouseX>this.xVals[i]-90 && mouseX<this.xVals[i]+90&&
+                        mouseY<this.yVals[i]+70 && mouseY>this.yVals[i]-70)
+                      {
+                        console.log("hit:: "+this.wordsC[i]);
+                        this.wordsFonts[i] ="150px Garamond"; // when the word is being hit
+                        document.getElementById("audioG").play();
+                        document.getElementById("audioD").pause();
+                        document.getElementById("audioE").pause();
+                        document.getElementById("audioF").pause();
+                        playing =true;
+                      }
+                    else {
+                     this.wordsFonts[i] ="20px 'Oxygen', sans-serif"; // when the word is NOT being hit
+                ;
+
+                     }
+                    }//for
+
+
+                  }
+                }//snake four
+} //END ON LOAD
+  </script>
+</head>
+<body>
+  <audio id = "audioC" controls>
+  <source src="sounds/allsounds.mp3" type="audio/mp3" id="soundAudioFile">
+  </audio>
+  <audio id = "audioD" controls>
+  <source src="sounds/childrens.mp3" type="audio/mp3" id="soundAudioFile">
+  </audio>
+  <audio id = "audioE" controls>
+  <source src="sounds/kids.mp3" type="audio/mp3" id="soundAudioFile">
+  </audio>
+  <audio id = "audioF" controls>
+  <source src="sounds/teens.mp3" type="audio/mp3" id="soundAudioFile">
+  </audio>
+  <audio id = "audioG" controls>
+  <source src="sounds/adult.mp3" type="audio/mp3" id="soundAudioFile">
+  </audio>
+
+  <canvas id = "testCanvas" width = 2000 height =1000></canvas>
+</body>
+</html>
