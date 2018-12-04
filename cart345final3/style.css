@@ -1,0 +1,21 @@
+body{
+  margin:5;
+  padding:5;
+}
+canvas{
+  position:absolute;
+  background:grey;
+  z-index:1;
+}
+
+audio{
+position:absolute;
+z-index:5;
+top:5px;
+left:30%;
+}
+
+source{
+
+align-items: center;
+}
